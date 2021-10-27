@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, request, current_app, url_for, flash, redirect
 
 from bluelog.emails import send_new_reply_email, send_new_comment_email
-from bluelog.models import Post, Comment
+from bluelog.models import Post, Comment, Category
 from bluelog.forms import AdminCommentForm
 from bluelog.extensions import db
 
@@ -19,6 +19,21 @@ def index():
     pagination = Post.query.order_by(Post.timestamp.desc()).pagination(page, per_page=per_page)
     posts = pagination.items
     return render_template('blog/index.html', pagination=pagination, posts=posts)
+
+
+@blog_bp.route('/about')
+def about():
+    return render_template('blog/about.html')
+
+
+@blog_bp.route('/category/<int:category_id>')
+def show_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BLUELOG_POST_PERPAGE']
+    pagination = Post.query.with_parent(category).order_by(Post.timestamp.desc()).pagination(page, per_page)
+    posts = pagination.items
+    return render_template('blog/category.html', category=category, pagination=pagination, posts=posts)
 
 
 @blog_bp.route('/post/<int:post_id>', methods=['GET', 'POST'])
@@ -64,3 +79,13 @@ def show_post(post_id):
             send_new_comment_email(post)
         return redirect(url_for('.show_post', post_id=post_id))
     return render_template('blog/post.html', post=post, pagination=pagination, form=form, comments=comments)
+
+
+@blog_bp.route('/reply/comment/<int:comment_id>')
+def reply_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    if not comment.post.can_comment:
+        flash('Comment is disabled.', 'warning')
+        return redirect(url_for('.show_post', post_id=comment.post.id))
+    return redirect(
+        url_for('.show_post', post_id=comment.post_id, reply=comment_id, author=comment.author) + '#comment-form')
