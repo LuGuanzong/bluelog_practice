@@ -28,6 +28,8 @@ class BaseConfig(object):  # 继承自object类，可以思考一下，很巧妙
     BLUELOG_MANAGE_POST_PRE_PAGE = 15
     BLUELOG_COMMENT_PRE_PAGE = 15
 
+    BLUELOG_THEMES = {'perfect_blue': "Perfect Blue", 'black_swan': 'Black Swan'}
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')

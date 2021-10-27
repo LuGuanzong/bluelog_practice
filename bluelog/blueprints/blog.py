@@ -1,9 +1,10 @@
-from flask import render_template, Blueprint, request, current_app, url_for, flash, redirect
+from flask import render_template, Blueprint, request, current_app, url_for, flash, redirect, abort, make_response
 
 from bluelog.emails import send_new_reply_email, send_new_comment_email
 from bluelog.models import Post, Comment, Category
 from bluelog.forms import AdminCommentForm
 from bluelog.extensions import db
+from bluelog.utils import redirect_back
 
 blog_bp = Blueprint('blog', __name__)
 
@@ -89,3 +90,13 @@ def reply_comment(comment_id):
         return redirect(url_for('.show_post', post_id=comment.post.id))
     return redirect(
         url_for('.show_post', post_id=comment.post_id, reply=comment_id, author=comment.author) + '#comment-form')
+
+
+@blog_bp.route('/change-theme/<theme_name>')
+def change_theme(theme_name):
+    if theme_name not in current_app.config['BLUELOG_THEMES'].keys():
+        abort(404)
+
+    response = make_response(redirect_back())
+    response.set_cookie('theme', theme_name, max_age=30 * 24 * 60 * 60)
+    return response
