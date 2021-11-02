@@ -23,6 +23,7 @@ flask-debugtoolbar = "*"
 gunicorn = "*"
 #"psycopg2" = "*"
 flask-migrate = "*"
+email-validator = "*"
 
 [requires]
 python_version = "3.9"

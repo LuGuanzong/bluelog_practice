@@ -4,7 +4,7 @@
         <ul class="list-group list-group-flush">
             {% for link in links %}
                 <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <a href="{{ link.url }}" target="_blank">{{ link,name }}</a>
+                    <a href="{{ link.url }}" target="_blank">{{ link.name }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -33,9 +33,9 @@
         Change Theme
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        {% for theme_name, diaplay_name in config.BLUELOG_THEMES.items() %}
+        {% for theme_name, display_name in config.BLUELOG_THEMES.items() %}
             <a class="dropdown-item"
-               href="{{ url_for('blog.change_theme', theme_name=theme_name, next=request.full_path }}">
+               href="{{ url_for('blog.change_theme', theme_name=theme_name, next=request.full_path) }}">
                 {{ display_name }}
             </a>
         {% endfor %}

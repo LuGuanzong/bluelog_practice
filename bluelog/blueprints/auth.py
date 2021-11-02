@@ -26,7 +26,8 @@ def login():
                 return redirect_back()
             flash('Invalid username or password.', 'warning')
         else:
-            flash('No account.' 'warning')
+            flash('No account.', 'warning')
+    print('form是', form)
     return render_template('auth/login.html', form=form)
 
 

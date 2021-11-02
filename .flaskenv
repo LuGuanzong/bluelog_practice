@@ -1,2 +1,3 @@
 FLASK_APP=bluelog
 FLASK_ENV=development
+FLASK_RUN_PORT=7111

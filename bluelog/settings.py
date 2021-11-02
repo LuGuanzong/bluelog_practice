@@ -24,7 +24,7 @@ class BaseConfig(object):  # 继承自object类，可以思考一下，很巧妙
     MAIL_DEFAULT_SENDER = ('Bluelog Admin', MAIL_USERNAME)
 
     BLUELOG_EMAIL = os.getenv('BLUE_EMAIL')
-    BLUELOG_POST_PRE_PAGE = 10
+    BLUELOG_POST_PER_PAGE = 10
     BLUELOG_MANAGE_POST_PRE_PAGE = 15
     BLUELOG_COMMENT_PRE_PAGE = 15
 
